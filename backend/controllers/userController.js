@@ -85,3 +85,17 @@ export const changePassword = async (req, res, next) => {
         next(error);
     }
 }
+
+// Delete account
+export const deleteAccount = async (req, res, next) => {
+    try {
+        await User.delete(req.user.id);
+
+        res.json({
+            success: true,
+            message: 'Acccount deleted successfully'
+        });
+    } catch (error){
+        next(error);
+    }
+}
