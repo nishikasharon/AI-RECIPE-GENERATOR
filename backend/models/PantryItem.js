@@ -47,4 +47,20 @@ class PantryItem{
         const result = await db.query(query,params);
         return result.rows;
     }
+
+    // Get items expiring soon (within next 7 days)
+
+    static async getExpirySoon(userId, days = 7) {
+        const result = await db.query(
+            `SELECT * FROM pantry_items
+        WHERE user_id = $1
+        AND expiry_date IS NOT NULL
+        AND expiry_date <= CURRENT_DATE + INTERVAL '${days} days'
+        AND expiry_date >= CURRENT_DATE
+        ORDER BY expiry_date ASC`,
+            [userId]
+        );
+
+        return result.rows;
+    }
 }
