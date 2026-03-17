@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS shopping_list_items (
 --Create indexes for better query performance
 CREATE INDEX IF NOT EXISTS idx_pantry_user_id ON pantry_items(user_id);
 CREATE INDEX IF NOT EXISTS idx_pantry_category ON pantry_items(category);
-CREATE INDEX IF FOR EXISTS idx_pantry_expiry ON pantry_items(expiry_date);
+CREATE INDEX IF NOT EXISTS idx_pantry_expiry ON pantry_items(expiry_date);
 
 CREATE INDEX IF NOT EXISTS idx_recipes_user_id ON recipes(user_id);
 CREATE INDEX IF NOT EXISTS idx_recipes_cuisine ON recipes(cuisine_type);
