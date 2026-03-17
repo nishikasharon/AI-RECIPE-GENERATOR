@@ -88,10 +88,10 @@ export const login = async (req, res, next) =>{
         }
 
         // Verify password
-        const isPasswornValid = await User.verifyPassword(password, user.password_hash);
+        const isPasswordValid = await User.verifyPassword(password, user.password_hash);
 
         if (!isPasswornValid) {
-            return res.status.status(401).json({
+            return res.status(401).json({
                 success: false,
                 message: 'Invalid credentials'
             });
@@ -116,3 +116,48 @@ export const login = async (req, res, next) =>{
         next (error);
     }
 };
+
+// Get current user
+export const getCurrentUser = async (req, res, next) => {
+    try {
+        const user = await User.findByEmail(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            date: { user }
+        });
+    } catch (error){
+        next(error);
+    } 
+};
+
+// Request password reset (placeholder - would send email in production)
+export const requestPasswornReset = asyc (req, res, next) => {
+    try{
+        const { email } = req.body;
+
+        if(!email) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide email'
+            });
+        }
+
+        const user = await User.findByEmail(email);
+
+        // Don't reveal if user exists or not fo security reasons
+        res.json({
+            success: true,
+            message: 'If an account exists with this email, a password reset link has been sent :) '
+        });
+    } catch(error){
+        next(error);
+    }
+}
