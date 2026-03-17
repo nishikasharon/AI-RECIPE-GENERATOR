@@ -10,7 +10,7 @@ class PantryItem{
              `INSERT INTO pantry_items
         (user_id, name, quantity, unit, category, expiry_date, is_running_low )
         VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING *`
+        RETURNING *`,
             [userId, name, quantity, unit, category, expiry_date, is_running_low ]
         ); 
 
@@ -32,7 +32,7 @@ class PantryItem{
 
         if (filters.is_running_low !== undefined) {
             paramCount++;
-            query += `AND running_low = $${paramCount}`;
+            query += `AND is_running_low = $${paramCount}`;
             params.push(filters.is_running_low);
         }
 
@@ -58,7 +58,7 @@ class PantryItem{
         AND expiry_date <= CURRENT_DATE + INTERVAL '${days} days'
         AND expiry_date >= CURRENT_DATE
         ORDER BY expiry_date ASC`,
-            [userId]
+            [userId, days]
         );
 
         return result.rows;
@@ -66,7 +66,7 @@ class PantryItem{
 
     // Get pantry items by ID
 
-    static async findByUserId(id, userId) {
+    static async findById(id, userId) {
         const result = await db.query(
             'SELECT * FROM pantry_items WHERE id = $1 AND user_id = $2',
             [id, userId]
@@ -80,16 +80,16 @@ class PantryItem{
     static async update(id, userId, updates) {
         const { name, quantity, unit, category, expiry_date, is_running_low} = updates;
 
-        const result = await DataView.query(
+        const result = await db.query(
             `UPDATE pantry_items
         SET name = COALESCE($1, name),
             quantity = COALESCE($2, quantity),
             unit = COALESCE($3, unit),
             category = COALESCE($4, category),
             expiry_date = COALESCE($5, expiry_date),
-            is_running_low = COALESCE($6, is_running_low),
+            is_running_low = COALESCE($6, is_running_low)
         WHERE id = $7 AND user_id = $8
-        RETURNING *`
+        RETURNING *`,
             [ name, quantity, unit, category, expiry_date, is_running_low, id, userId]
         );
 
@@ -100,7 +100,7 @@ class PantryItem{
 
     static async delete(id, userId){
         const result = await db.query(
-            'DELETE FROM pantry_items WHERE id = $1 AND user_id = $2 RETURNING *'
+            'DELETE FROM pantry_items WHERE id = $1 AND user_id = $2 RETURNING *',
             [id, userId]
         );
 
