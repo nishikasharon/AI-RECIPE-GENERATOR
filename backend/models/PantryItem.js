@@ -63,4 +63,15 @@ class PantryItem{
 
         return result.rows;
     }
+
+    // Get pantry items by ID
+
+    static async findByUserId(id, userId) {
+        const result = await db.query(
+            'SELECT * FROM pantry_items WHERE id = $1 AND user_id = $2',
+            [id, userId]
+        );
+
+        return result.rows[0];
+    }
 }
