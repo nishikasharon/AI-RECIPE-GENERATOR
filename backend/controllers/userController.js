@@ -35,3 +35,18 @@ export const constupdateProfile = async (req, res, next) => {
         next(error);
     }
 }
+
+// Update user preferences
+export const updateUserPreference = async (req, res, next) => {
+    try{
+        const preferences = await UserPreference.upsert(req.user.id, req.body);
+
+        res.json({
+            success: true,
+            message: 'Preferences updated successfully',
+            data: { preferences }
+        });
+    } catch (error){
+        next(error);
+    }
+}
