@@ -95,4 +95,34 @@ class PantryItem{
 
         return result.rows[0];
     }
+
+    // Delete pantry item
+
+    static async delete(id, userId){
+        const result = await db.query(
+            'DELETE FROM pantry_items WHERE id = $1 AND user_id = $2 RETURNING *'
+            [id, userId]
+        );
+
+        return result.rows[0];
+    }
+
+    // Get pantry stats
+
+    static async getStats(userId) {
+        const result = await db.query(
+            `SELECT 
+        COUNT(*) as total_items,
+        COUNT(DISTINCT category) as total_categories,
+        COUNT(*) FILTER (WHERE is_running_low = true) as running _low_count,
+        COUNT(*) FILTER (WHERE expiry_date <= CURRENT_DATE + INTERVAL '7 days' AND expiry_date >= CURRENT_DATE) as expiring_soon_count
+        FROM pantry_items
+        WHERE user_id = $1`,
+            [userId]
+        );
+
+        return result.rows[0];
+    }
 }
+
+export default PantryItem;
