@@ -4,7 +4,7 @@ import UserPreference from '../models/UserPreference.js';
 // Get user profile
 export const getProfile = async (req, res, next) => {
     try {
-        const user = await User.findByEmail(req.user.id);
+        const user = await User.findById(req.user.id);
         const preferences = await UserPreference.findByUserId(req.user.id);
 
         res.json({
@@ -20,7 +20,7 @@ export const getProfile = async (req, res, next) => {
 } 
 
 // Update user profile
-export const constupdateProfile = async (req, res, next) => {
+export const updateProfile = async (req, res, next) => {
     try {
         const {name, email} = req.body;
 
@@ -56,7 +56,7 @@ export const changePassword = async (req, res, next) => {
     try{
         const {currentPassword, newPassword} = req.body;
 
-        if (!currentPassword || newPassword){
+        if (!currentPassword || !newPassword){
             return res.json({
                 success: false,
                 message: 'Please provide current and new password'

@@ -139,7 +139,7 @@ export const getCurrentUser = async (req, res, next) => {
 };
 
 // Request password reset (placeholder - would send email in production)
-export const requestPasswornReset = asyc (req, res, next) => {
+export const requestPasswornReset = async (req, res, next) => {
     try{
         const { email } = req.body;
 
@@ -160,4 +160,4 @@ export const requestPasswornReset = asyc (req, res, next) => {
     } catch(error){
         next(error);
     }
-}
+};
