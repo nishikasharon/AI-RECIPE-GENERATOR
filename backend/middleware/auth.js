@@ -1,14 +1,14 @@
 import jwt from 'jsonwebtoken';
 
-const authMiddleware = async (requestAnimationFrame, resizeBy, next) => {
+const authMiddleware = async (req, res, next) => {
     try{
         //Get token from header
-        const token = req.header('Autherization')?.replace('Bearer ', '');
+        const token = req.header('Authorization')?.replace('Bearer ', '');
 
         if (!token) {
             return res.status(401).json({
                 success: false,
-                message: 'No authenication token, access denied'
+                message: 'No authentication token, access denied'
             });
         }
 

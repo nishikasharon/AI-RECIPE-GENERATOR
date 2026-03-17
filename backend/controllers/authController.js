@@ -120,7 +120,7 @@ export const login = async (req, res, next) =>{
 // Get current user
 export const getCurrentUser = async (req, res, next) => {
     try {
-        const user = await User.findByEmail(req.user.id);
+        const user = await User.findById(req.user.id);
 
         if (!user) {
             return res.status(404).json({
@@ -131,7 +131,7 @@ export const getCurrentUser = async (req, res, next) => {
 
         res.json({
             success: true,
-            date: { user }
+            data: { user }
         });
     } catch (error){
         next(error);
