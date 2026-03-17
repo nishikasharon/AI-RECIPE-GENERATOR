@@ -50,3 +50,38 @@ export const updateUserPreference = async (req, res, next) => {
         next(error);
     }
 }
+
+// Change password
+export const changePassword = async (req, res, next) => {
+    try{
+        const {currentPassword, newPassword} = req.body;
+
+        if (!currentPassword || newPassword){
+            return res.json({
+                success: false,
+                message: 'Please provide current and new password'
+            });
+        }
+
+        // Verify current password
+        const user = await User.findByEmail(req.user.email);
+        const isValid = await User.verifyPassword(currentPassword, user.password_hash);
+
+        if (!isValid) {
+            return res.status(401).json({
+                success: false,
+                message: 'Curent password is incorrect'
+            });
+        }
+
+        //Update the password
+        await User.updatePassword(req.user.id, newPassword);
+
+        res.json({
+            success: true,
+            message: 'Password changed successfully'
+        });
+    } catch (error){
+        next(error);
+    }
+}
