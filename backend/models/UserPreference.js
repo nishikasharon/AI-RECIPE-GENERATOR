@@ -29,4 +29,24 @@ class UserPreference{
 
         return result.rows[0];
     }
+
+    //Get user preferences
+    static async findByUserId(userId){
+        const result = await db.query(
+            `SELECT * FROM user_preference WHERE user_id = $1`,
+            [userId]
+        );
+
+        return result.rows[0];
+    }
+
+    //Delete user preferences
+    static async delete(userId){
+        await db.query(
+            `DELETE FROM user_preferences WHERE user_id = $1`,
+            [userId]
+        );
+    }
 }
+
+export default UserPreference;
