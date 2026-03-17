@@ -83,14 +83,14 @@ export const login = async (req, res, next) =>{
         if (!user) {
             return res.status(401).json({
                 success: false,
-                message: 'Invali credentials'
+                message: 'Invalid credentials'
             });
         }
 
         // Verify password
         const isPasswordValid = await User.verifyPassword(password, user.password_hash);
 
-        if (!isPasswornValid) {
+        if (!isPasswordValid) {
             return res.status(401).json({
                 success: false,
                 message: 'Invalid credentials'
@@ -102,7 +102,7 @@ export const login = async (req, res, next) =>{
 
         res.json({
             success: true,
-            message: 'Logic successful',
+            message: 'Login successful',
             data: {
                 user:{
                     id: user.id,
@@ -139,7 +139,7 @@ export const getCurrentUser = async (req, res, next) => {
 };
 
 // Request password reset (placeholder - would send email in production)
-export const requestPasswornReset = async (req, res, next) => {
+export const requestPasswordReset = async (req, res, next) => {
     try{
         const { email } = req.body;
 

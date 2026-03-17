@@ -18,7 +18,7 @@ class UserPreference{
         VALUES ($1, $2, $3, $4, $5, $6)
         ON CONFLICT (user_id)
         DO UPDATE SET
-            dietary_restriction = $2,
+            dietary_restrictions = $2,
             allergies = $3,
             preferred_cuisines = $4,
             default_servings = $5,
@@ -33,7 +33,7 @@ class UserPreference{
     //Get user preferences
     static async findByUserId(userId){
         const result = await db.query(
-            `SELECT * FROM user_preference WHERE user_id = $1`,
+            `SELECT * FROM user_preferences WHERE user_id = $1`,
             [userId]
         );
 

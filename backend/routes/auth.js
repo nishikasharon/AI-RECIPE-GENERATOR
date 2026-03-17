@@ -4,7 +4,7 @@ import * as authController from '../controllers/authController.js';
 import authMiddleware from '../middleware/auth.js'; 
 
 // Public routes
-router.post('/singup', authController.register);
+router.post('/signup', authController.register);
 router.post('/login', authController.login);
 router.post('/reset-password', authController.requestPasswornReset);
 

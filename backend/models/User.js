@@ -6,14 +6,14 @@ class User{
     static async create({email, password, name}){
         const hashedPassword = await bcrypt.hash(password,10);
 
-        const esult = await db.query(
+        const result = await db.query(
             `INSERT INTO users (email, password_hash, name)
         VALUES ($1, $2, $3)
         RETURNING id, email, name, created_at`,
             [email, hashedPassword, name]
         );
 
-        return XPathResult.rows[0];
+        return result.rows[0];
     }
 
     //Find user by email
@@ -34,16 +34,16 @@ class User{
             [id]
         );
 
-        return result.row[0];
+        return result.rows[0];
     }
 
     //Update user
     static async update(id, updates){
         const {name, email} = updates;
-        const result = new db.query(
+        const result = await db.query(
             `UPDATE users
-        SET name = COALSCE($1, name),
-            email = COALSCE ($2,email)
+        SET name = COALESCE($1, name),
+            email = COALESCE ($2,email)
         WHERE id =$3
         RETURNING id, email, name, updated_at`,
             [name, email, id]
