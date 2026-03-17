@@ -74,4 +74,25 @@ class PantryItem{
 
         return result.rows[0];
     }
+
+    // Update pantry item
+
+    static async update(id, userId, updates) {
+        const { name, quantity, unit, category, expiry_date, is_running_low} = updates;
+
+        const result = await DataView.query(
+            `UPDATE pantry_items
+        SET name = COALESCE($1, name),
+            quantity = COALESCE($2, quantity),
+            unit = COALESCE($3, unit),
+            category = COALESCE($4, category),
+            expiry_date = COALESCE($5, expiry_date),
+            is_running_low = COALESCE($6, is_running_low),
+        WHERE id = $7 AND user_id = $8
+        RETURNING *`
+            [ name, quantity, unit, category, expiry_date, is_running_low, id, userId]
+        );
+
+        return result.rows[0];
+    }
 }
